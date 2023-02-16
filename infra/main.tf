@@ -29,34 +29,34 @@ resource "azurerm_resource_group" "tf-rg" {
 resource "azurerm_virtual_network" "tf-vnet" {
   name                = "tf-vnet"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.tf-rg.location
+  resource_group_name = azurerm_resource_group.tf-rg.name
 }
 
 resource "azurerm_subnet" "tf-subnet" {
   name                 = "tf-subnet"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = azurerm_resource_group.tf-rg.name
+  virtual_network_name = azurerm_virtual_network.tf-vnet.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "tf-nic" {
   name                = "tf-nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.tf-rg.location
+  resource_group_name = azurerm_resource_group.tf-rg.name
 
   ip_configuration {
     name                          = "testconfiguration1"
-    subnet_id                     = azurerm_subnet.internal.id
+    subnet_id                     = azurerm_subnet.tf-subnet.id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
 resource "azurerm_virtual_machine" "tf-vm" {
   name                  = "$tf-vm"
-  location              = azurerm_resource_group.example.location
-  resource_group_name   = azurerm_resource_group.example.name
-  network_interface_ids = [azurerm_network_interface.main.id]
+  location              = azurerm_resource_group.tf-rg.location
+  resource_group_name   = azurerm_resource_group.tf-rg.name
+  network_interface_ids = [azurerm_network_interface.tf-nic.id]
   vm_size               = "Standard_DS1_v2"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM

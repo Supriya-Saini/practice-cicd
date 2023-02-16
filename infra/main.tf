@@ -53,7 +53,7 @@ resource "azurerm_network_interface" "tf-nic" {
 }
 
 resource "azurerm_virtual_machine" "tf-vm" {
-  name                  = "$tf-vm"
+  name                  = "tf-vm"
   location              = azurerm_resource_group.tf-rg.location
   resource_group_name   = azurerm_resource_group.tf-rg.name
   network_interface_ids = [azurerm_network_interface.tf-nic.id]

@@ -40,3 +40,16 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false
       working-directory: infra/
+  deploy:
+  	name:'Deploy to Azure'
+  	steps:
+    - uses: JimCronqvist/action-ssh@7737f1192ddd8376686e9d6354dea44592c942bf
+      name: Execute SSH commmands on remote server
+      with:
+       hosts: '${{ secrets.REMOTE_USER }}@${{ secrets.HOSTNAME }}'
+       privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+       command: |
+       	yes|apt-get install docker
+       	docker login -u="${{ secrets.DOCKERHUB_USERNAME }}" -p="${{ secrets.DOCKERHUB_PASSWORD }}"
+       	docker run -d -p 8080:8080 supriya7/cicd-demo:latest
+	

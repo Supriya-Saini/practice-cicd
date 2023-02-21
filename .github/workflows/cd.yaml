@@ -55,6 +55,7 @@ jobs:
        password: ${{ secrets.SSH_PRIVATE_KEY }}
        port: 22
        script: |
-        apt-get install docker
+        sudo su
+        yes|apt-get install docker
         docker login -u="${{ secrets.DOCKERHUB_USERNAME }}" -p="${{ secrets.DOCKERHUB_PASSWORD }}"
         docker run -d -p 8080:8080 supriya7/cicd-demo:latest

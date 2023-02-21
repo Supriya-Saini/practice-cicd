@@ -52,7 +52,7 @@ jobs:
       with:
        host: '20.235.106.203'
        username: ${{ secrets.REMOTE_USER }}
-       key: ${{ secrets.SSH_PRIVATE_KEY }}
+       password: ${{ secrets.SSH_PRIVATE_KEY }}
        port: 22
        script: |
         apt-get install docker

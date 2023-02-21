@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
     - master
+defaults:
+  run:
+    shell: bash
 jobs:
   terraform:
     name: 'Terraform'
@@ -41,15 +44,17 @@ jobs:
       run: terraform apply -auto-approve -input=false
       working-directory: infra/
   deploy:
-  	name:'Deploy to Azure'
-  	steps:
-    - uses: JimCronqvist/action-ssh@7737f1192ddd8376686e9d6354dea44592c942bf
-      name: Execute SSH commmands on remote server
+    name: 'Deploy to Azure'
+    runs-on: ubuntu-latest
+    steps:
+    - name: multiple command
+      uses: appleboy/ssh-action@v0.1.7
       with:
-       hosts: '${{ secrets.REMOTE_USER }}@${{ secrets.HOSTNAME }}'
-       privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
-       command: |
-       	yes|apt-get install docker
-       	docker login -u="${{ secrets.DOCKERHUB_USERNAME }}" -p="${{ secrets.DOCKERHUB_PASSWORD }}"
-       	docker run -d -p 8080:8080 supriya7/cicd-demo:latest
-	
+       host: ${{ secrets.HOSTNAME }}
+       username: ${{ secrets.REMOTE_USER }}
+       key: ${{ secrets.SSH_PRIVATE_KEY }}
+       port: 22
+       script: |
+        apt-get install docker
+        docker login -u="${{ secrets.DOCKERHUB_USERNAME }}" -p="${{ secrets.DOCKERHUB_PASSWORD }}"
+        docker run -d -p 8080:8080 supriya7/cicd-demo:latest

@@ -40,6 +40,13 @@ resource "azurerm_subnet" "tf-subnet" {
   address_prefixes     = ["10.0.2.0/24"]
 }
 
+resource "azurerm_public_ip" "pip" {
+  name                = "tf-pip"
+  location            = azurerm_resource_group.tf-rg.location
+  resource_group_name = azurerm_resource_group.tf-rg.name
+  allocation_method   = "Static"
+}
+
 resource "azurerm_network_interface" "tf-nic" {
   name                = "tf-nic"
   location            = azurerm_resource_group.tf-rg.location
@@ -49,6 +56,7 @@ resource "azurerm_network_interface" "tf-nic" {
     name                          = "testconfiguration1"
     subnet_id                     = azurerm_subnet.tf-subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.pip.id
   }
 }
 

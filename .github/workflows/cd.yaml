@@ -50,7 +50,7 @@ jobs:
     - name: multiple command
       uses: appleboy/ssh-action@v0.1.7
       with:
-       host: ${{ secrets.HOSTNAME }}
+       host: '20.235.106.203'
        username: ${{ secrets.REMOTE_USER }}
        key: ${{ secrets.SSH_PRIVATE_KEY }}
        port: 22

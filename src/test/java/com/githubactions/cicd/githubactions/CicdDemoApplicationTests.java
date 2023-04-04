@@ -21,7 +21,7 @@ class CicdDemoApplicationTests {
 	@Test
 	public void greetingShouldReturnDefaultMessage() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/welcome",
-				String.class)).contains("Welcome Supriya!!!");
+				String.class)).contains("Welcome Supriy!!!");
 	}
 
 }

@@ -17,8 +17,8 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-latest    
-    container:
-      image: ubuntu:18.04
+#     container:
+#       image: ubuntu:18.04
     services:
       mynginx:
         image: nginx        
@@ -28,7 +28,7 @@ jobs:
         run: |
           apt-get update
           apt-get install curl -y
-          curl mynginx
+          curl http://127.0.0.1:80
        
   build:
 

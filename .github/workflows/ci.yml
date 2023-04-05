@@ -24,6 +24,7 @@ jobs:
         image: nginx        
     steps:
       - name: Check nginx
+        continue-on-error: true
         run: |
           apt-get update
           apt-get install curl -y

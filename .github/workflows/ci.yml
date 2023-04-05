@@ -24,7 +24,9 @@ jobs:
         image: nginx        
     steps:
       - name: Check nginx
-        run: curl http://127.0.0.1:80
+        run: |
+          apt-get install curl -y
+          curl http://127.0.0.1:80
        
   build:
 

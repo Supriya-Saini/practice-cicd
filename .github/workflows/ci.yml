@@ -21,7 +21,9 @@ jobs:
 #       image: ubuntu:18.04
     services:
       mynginx:
-        image: nginx        
+        image: nginx 
+        ports:
+          - 80:80
     steps:
       - name: Check nginx
         continue-on-error: true

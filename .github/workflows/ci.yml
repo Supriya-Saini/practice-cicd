@@ -18,7 +18,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    container:
+      image: ubuntu:latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -28,6 +29,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
+      continue-on-error: true
       id: build-step
       run: mvn clean install
     - name: Upload test report

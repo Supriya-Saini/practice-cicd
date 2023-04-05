@@ -28,7 +28,7 @@ jobs:
         run: |
           apt-get update
           apt-get install curl -y
-          curl http://127.0.0.1:80
+          curl mynginx
        
   build:
 

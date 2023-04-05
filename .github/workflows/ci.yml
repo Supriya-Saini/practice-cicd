@@ -25,10 +25,10 @@ jobs:
     steps:
       - name: Check nginx
         continue-on-error: true
-        run: |
-          apt-get update
-          apt-get install curl -y
-          curl http://127.0.0.1:80
+        run: curl http://127.0.0.1:80
+        #apt-get update
+        #apt-get install curl -y
+          
        
   build:
 

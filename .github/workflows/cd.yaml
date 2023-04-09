@@ -1,0 +1,61 @@
+name: cd-demo
+on:
+    workflow_dispatch:
+#   push:
+#     branches:
+#     - master
+#   pull_request:
+#     branches:
+#     - master
+defaults:
+  run:
+    shell: bash
+jobs:
+  terraform:
+    name: 'Terraform'
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2 
+      with:
+        cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
+        
+    - name: Terraform Init
+      run: terraform init
+      working-directory: infra/
+      
+    - name: Terraform Plan
+      run: terraform plan -input=false
+      working-directory: infra/
+      
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -input=false
+      working-directory: infra/
+  deploy:
+    name: 'Deploy to Azure'
+    runs-on: ubuntu-latest
+    steps:
+    - name: multiple command
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+       host: '20.235.106.203'
+       username: ${{ secrets.REMOTE_USER }}
+       password: ${{ secrets.SSH_PRIVATE_KEY }}
+       port: 22
+       script: |
+        sudo apt -y install docker.io
+        sudo docker login -u="${{ secrets.DOCKERHUB_USERNAME }}" -p="${{ secrets.DOCKERHUB_PASSWORD }}"
+        sudo docker run -d -p 8080:8080 supriya7/cicd-demo:latest
